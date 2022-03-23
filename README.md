@@ -11,6 +11,12 @@ Cloning is a pretty standard task, but if you need a hand, you can find the comm
 git clone https://github.com/nizarmah/urban-tree.git
 ```
 
+Make sure to cd into the cloned project after.
+
+```sh
+cd urban-tree
+```
+
 ### Specify Node Version
 
 Initially, make sure you have [Node Version Manager](https://github.com/nvm-sh/nvm) installed.
