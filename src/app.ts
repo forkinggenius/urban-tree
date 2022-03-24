@@ -11,7 +11,7 @@ const queuedDirectories = process.argv.splice(2);
 console.debug(`queued directories: ${queuedDirectories}`);
 
 queuedDirectories.forEach(
-    directoryPath => rootDirectoryNodes.push(new FileTreeNode(directoryPath)));
+    directoryPath => rootDirectoryNodes.push(FileTreeNode.get(directoryPath)));
 
 app.get('/', (req, res) => {
     res.json(
