@@ -17,6 +17,7 @@
   "author": "",
   "license": "GPL-3.0",
   "dependencies": {
+    "chokidar": "^3.5.3",
     "express": "^4.17.3"
   },
   "devDependencies": {
