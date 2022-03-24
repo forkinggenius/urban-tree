@@ -61,7 +61,7 @@ directoryChangeWatcher.on('all', (event, path) => {
         }
 
         clients.forEach(client => {
-            client.res.write(`data: ${JSON.stringify(data)}\n\n`)
+            client.res.write(`event: update\ndata: ${JSON.stringify(data)}\n\n`)
         });
     }
 });
@@ -70,7 +70,7 @@ app.get('/status', (req, res) => res.json({clients: clients.length}));
 
 app.get('/events', (req, res) => {
     res.writeHead(200, SSE_HEADERS);
-    res.write(`data: ${JSON.stringify(FileTree.roots)}\n\n`);
+    res.write(`event: message\ndata: ${JSON.stringify(FileTree.roots)}\n\n`);
 
     const clientId = Date.now();
     

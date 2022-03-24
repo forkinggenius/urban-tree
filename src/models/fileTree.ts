@@ -41,7 +41,7 @@ export class FileTree {
                 const childFilePath = path.join(filePath, childFileName);
                 const childNode = FileTree.getNode(childFilePath);
     
-                newNode.childNodes.set(childNode.baseName, childNode);
+                newNode.childNodes.set(childNode.filePath, childNode);
             });
         }
 
@@ -54,11 +54,11 @@ export class FileTree {
 
         this.addNodeToParent(parentNode, newNode);
 
-        console.debug(`added node: ${newNode.baseName}`);
+        console.debug(`added node: ${newNode.filePath}`);
     }
 
     private static addNodeToParent(parentNode: FileTreeNode, node: FileTreeNode) {
-        parentNode.childNodes.set(node.baseName, node);
+        parentNode.childNodes.set(node.filePath, node);
 
         console.debug(JSON.stringify(parentNode, null, 4));
     }
@@ -78,7 +78,7 @@ export class FileTree {
             this.memo.delete(childNode.filePath);
         });
 
-        console.debug(`unlinked node: ${currentNode.baseName}`);
+        console.debug(`unlinked node: ${currentNode.filePath}`);
     }
 
     private static unlinkNodeFromParentIfHasParent(node: FileTreeNode) {
@@ -90,7 +90,7 @@ export class FileTree {
         }
 
         const parentNode = this.getParentNode(node.filePath);
-        parentNode.childNodes.delete(node.baseName);
+        parentNode.childNodes.delete(node.filePath);
 
         console.debug(JSON.stringify(parentNode, null, 4));
     }

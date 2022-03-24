@@ -1,45 +1,50 @@
-import { useState } from 'react'
-import logo from './logo.svg'
+import React, { useState, useEffect, useRef } from "react";
+
+import FileExplorerTree from "./components/FileExplorerTree";
+import { modifyTree, FileTreeNode } from "./utils/fileTree";
+
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+const SSE_ENDPOINT_URL = 'http://localhost:3001/events';
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
-  )
+function App() {
+    const prevTreeRoot = useRef(new FileTreeNode());
+    const [treeRoot, setTreeRoot] = useState(new FileTreeNode());
+    const [listening, setListening] = useState(false);
+    
+    useEffect(() => {
+        if (!listening) {
+            const eventSource = new EventSource(SSE_ENDPOINT_URL);
+
+            eventSource.addEventListener('update', (event) => {
+                const parsedData = JSON.parse(event.data);
+                
+                setTreeRoot(
+                    modifyTree(prevTreeRoot.current, parsedData));
+            });
+
+            eventSource.addEventListener('message', (event) => {
+                const parsedData = JSON.parse(event.data);
+
+                setTreeRoot(
+                    new FileTreeNode(parsedData, true));
+            });
+
+            eventSource.onerror = () => eventSource.close();
+
+            setListening(true);
+        }
+    }, [listening, treeRoot, prevTreeRoot]);
+
+    useEffect(() => {
+        prevTreeRoot.current = treeRoot;
+    }, [treeRoot]);
+    
+    return (
+        <div className="App">
+            <FileExplorerTree treeRoot={treeRoot} />
+        </div>
+    )
 }
 
 export default App
