@@ -2,13 +2,15 @@ import fs from 'fs';
 import path from 'path';
 
 export class FileTreeNode {
+    static memo = new Map<string, FileTreeNode>();
+
     filePath = "";
     baseName = "";
 
     isDirectory = false;
-    child_nodes: FileTreeNode[] = [];
+    childNodes: FileTreeNode[] = [];
 
-    constructor(filePath: string) {
+    private constructor(filePath: string) {
         this.filePath = filePath;
         this.baseName = path.parse(filePath).base;
 
@@ -21,11 +23,19 @@ export class FileTreeNode {
         }
     }
 
+    static get(filePath: string) {
+        if (!this.memo.has(filePath)) {
+            this.memo.set(filePath, new FileTreeNode(filePath));
+        }
+
+        return this.memo.get(filePath);
+    }
+
     private collectChildNodes() {
         fs.readdirSync(this.filePath).forEach(childFileName => {
             const childFilePath = path.join(this.filePath, childFileName);
 
-            this.child_nodes.push(new FileTreeNode(childFilePath));
+            this.childNodes.push(FileTreeNode.get(childFilePath));
         });
     }
 }
