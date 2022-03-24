@@ -11,7 +11,7 @@ const SSE_HEADERS = {
 };
 
 const app = express();
-const port = 3000;
+const PORT = 3001;
 
 app.use(cors());
 
@@ -68,7 +68,7 @@ directoryChangeWatcher.on('all', (event, path) => {
 
 app.get('/status', (req, res) => res.json({clients: clients.length}));
 
-app.get('/', (req, res) => {
+app.get('/events', (req, res) => {
     res.writeHead(200, SSE_HEADERS);
     res.write(`data: ${JSON.stringify(FileTree.roots)}\n\n`);
 
@@ -86,6 +86,6 @@ app.get('/', (req, res) => {
     });
 });
 
-app.listen(port, () => {
-    return console.log(`Express server is listening at http://localhost:${port}`);
+app.listen(PORT, () => {
+    return console.log(`Express server is listening at http://localhost:${PORT}`);
 });
