@@ -1,16 +1,16 @@
 import fs from 'fs';
 import path from 'path';
 
-export class FileTreeNode {
-    static memo = new Map<string, FileTreeNode>();
+import { JsonMap as Map } from '../utils/jsonMap';
 
+export class FileTreeNode {
     filePath = "";
     baseName = "";
 
     isDirectory = false;
-    childNodes: FileTreeNode[] = [];
+    childNodes = new Map<string, FileTreeNode>();
 
-    private constructor(filePath: string) {
+    constructor(filePath: string) {
         this.filePath = filePath;
         this.baseName = path.parse(filePath).base;
 
@@ -19,23 +19,6 @@ export class FileTreeNode {
         if (fs.existsSync(this.filePath) && 
                 fs.lstatSync(this.filePath).isDirectory()) {
             this.isDirectory = true;
-            this.collectChildNodes();
         }
-    }
-
-    static get(filePath: string) {
-        if (!this.memo.has(filePath)) {
-            this.memo.set(filePath, new FileTreeNode(filePath));
-        }
-
-        return this.memo.get(filePath);
-    }
-
-    private collectChildNodes() {
-        fs.readdirSync(this.filePath).forEach(childFileName => {
-            const childFilePath = path.join(this.filePath, childFileName);
-
-            this.childNodes.push(FileTreeNode.get(childFilePath));
-        });
     }
 }
