@@ -23,9 +23,7 @@ export class FileTreeModification {
 }
 
 function addNode(rootNode: FileTreeNode, parentPath: string, node: FileTreeNode): FileTreeNode {
-    const childNodes: FileTreeNode[] = Object.values(rootNode.childNodes);
-
-    childNodes.forEach((childNode: FileTreeNode) => {
+    getChildrenNodesAsArray(rootNode).forEach((childNode: FileTreeNode) => {
         // checks if node is indirect or direct parent
         const isParentDir = parentPath.startsWith(childNode.filePath);
 
@@ -45,9 +43,7 @@ function addNode(rootNode: FileTreeNode, parentPath: string, node: FileTreeNode)
 }
 
 function unlinkNode(rootNode: FileTreeNode, nodePath: string): FileTreeNode {
-    const childNodes: FileTreeNode[] = Object.values(rootNode.childNodes);
-
-    childNodes.forEach((childNode: FileTreeNode) => {
+    getChildrenNodesAsArray(rootNode).forEach((childNode: FileTreeNode) => {
         // checks if is direct or indirect parent
         const isParentDir = nodePath.startsWith(childNode.filePath);
 

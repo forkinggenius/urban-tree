@@ -18,19 +18,22 @@ function App() {
 
             eventSource.addEventListener('update', (event) => {
                 const parsedData = JSON.parse(event.data);
-                
-                setTreeRoot(
-                    modifyTree(prevTreeRoot.current, parsedData));
-            });
 
-            eventSource.addEventListener('message', (event) => {
+                const updatedTreeRoot = new FileTreeNode(parsedData, true);
+                setTreeRoot(updatedTreeRoot);
+            });
+            eventSource.addEventListener('modify', (event) => {
                 const parsedData = JSON.parse(event.data);
-
-                setTreeRoot(
-                    new FileTreeNode(parsedData, true));
+                
+                const modifiedTreeRoot = modifyTree(prevTreeRoot.current, parsedData);
+                setTreeRoot(modifiedTreeRoot);
             });
 
-            eventSource.onerror = () => eventSource.close();
+            eventSource.onerror = () => {
+                setListening(false);
+                
+                eventSource.close();
+            };
 
             setListening(true);
         }

@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { FileTreeNode } from "../utils/fileTree";
 import FileExplorerTree from "./FileExplorerTree";
 
@@ -6,14 +8,23 @@ interface FileExplorerNodeProps {
 }
 
 function FileExplorerNode(props: FileExplorerNodeProps) {
+    const [collapsed, setCollapsed] = useState(false);
+
+    const toggle = () => {
+        setCollapsed(!collapsed);
+    }
+
     return (
         <>
             <li>
-                <div>
+                <div onClick={toggle}>
                     <span>{props.node.baseName}</span>
                 </div>
             </li>
-            <FileExplorerTree treeRoot={props.node} />
+            {
+                !collapsed &&
+                    <FileExplorerTree treeRoot={props.node} />
+            }
         </>
     );
 }
