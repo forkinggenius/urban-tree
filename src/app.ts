@@ -1,10 +1,24 @@
 import express from 'express';
 
+import { FileTreeNode } from './models/fileTreeNode';
+
 const app = express();
 const port = 3000;
 
+const rootDirectoryNodes: FileTreeNode[] = [];
+
+const queuedDirectories = process.argv.splice(2);
+console.debug(`queued directories: ${queuedDirectories}`);
+
+queuedDirectories.forEach(
+    directoryPath => rootDirectoryNodes.push(new FileTreeNode(directoryPath)));
+
 app.get('/', (req, res) => {
-    res.send("Hello World!");
+    res.json(
+        {
+            directories: rootDirectoryNodes,
+        }
+    );
 });
 
 app.listen(port, () => {

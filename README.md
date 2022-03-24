@@ -67,3 +67,4 @@ In case you'd like to learn more about the scripts available, you can find them 
 |`start`|starts the node js server (without building)|
 |`deploy`|runs the `build` script followed by the `start` script|
 |`lint`|runs eslint against the typescript code|
+|`debug`|runs the `deploy` script in debugging mode|
