@@ -7,7 +7,7 @@ import {
 import FileExplorerNode from "./FileExplorerNode";
 
 interface FileExplorerTreeProps {
-    treePath: string
+    treePath?: string
 }
 
 function FileExplorerTree(props: FileExplorerTreeProps) {
