@@ -1,0 +1,23 @@
+version: "3.9"
+services:
+    server:
+        container_name: nodejs
+        entrypoint: sh -c "npm ci && npm run deploy"
+        image: "node:17.8.0-alpine3.14"
+        ports:
+            - "3001:3001"
+        working_dir: /usr/src/app
+        volumes:
+            - ./server/:/usr/src/app
+    
+    client:
+        container_name: react
+        depends_on:
+            - server
+        entrypoint: sh -c "npm ci && npm run deploy"
+        image: "node:17.8.0-alpine3.14"
+        ports:
+            - "3000:3000"
+        working_dir: /usr/src/app
+        volumes:
+            - ./client/:/usr/src/app
