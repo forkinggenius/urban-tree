@@ -16,7 +16,8 @@ export const memoizeTree = (node: FileTreeNode) => {
     childNodes.forEach((child: FileTreeNode) => memoizeTree(child));
 };
 
-export const addToMemo = (parentPath: string, node: FileTreeNode) => {
+export const addToMemo = (nodePath: string, node: FileTreeNode) => {
+    const parentPath: string = path.dirname(nodePath);
     const siblingNodes: FileTreeNode[] = treeMemo.get(parentPath) || [];
 
     treeMemo.set(parentPath, siblingNodes.concat([node]));
