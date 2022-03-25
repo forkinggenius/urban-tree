@@ -6,12 +6,12 @@ import {
 
 import FileExplorerNode from "./FileExplorerNode";
 
-class FileExplorerTreeProps {
-    treePath: string = ''
+interface FileExplorerTreeProps {
+    treePath: string
 }
 
 function FileExplorerTree(props: FileExplorerTreeProps) {
-    const childNodes = useTreeMemo(props.treePath);
+    const childNodes = useTreeMemo(props.treePath || "");
     
     return (
         <ul>

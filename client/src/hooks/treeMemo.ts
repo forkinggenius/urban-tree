@@ -43,8 +43,6 @@ export function useTreeMemo(requestedPath: string) {
 
     const updateTreeBranch = () => {
         setTreeBranch(treeMemo.get(requestedPath) || []);
-
-        console.log(treeMemo.get(requestedPath) || []);
     };
 
     useEffect(() => {
