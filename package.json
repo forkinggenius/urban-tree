@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/app.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json",
     "clean": "rm -rf dist",
     "rebuild": "npm run clean && npm run build",
     "start": "node dist/app.js",
