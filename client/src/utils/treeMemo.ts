@@ -45,4 +45,8 @@ export class TreeMemo {
             this.memo.set(parentPath, siblingNodes.filter((node) => node.filePath != nodePath));
         }
     }
+
+    public static hasChildren(nodePath: string): boolean {
+        return (this.memo.get(nodePath) || []).length > 0;
+    }
 }
