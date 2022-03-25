@@ -1,5 +1,5 @@
-# urban-tree client
-React Tree File Explorer client for ubran-tree
+# urban-tree / client
+React tree file explorer client for ubran-tree
 
 ## Get Started
 
