@@ -17,14 +17,15 @@ function FileExplorerNode(props: FileExplorerNodeProps) {
 
     return (
         <>
-            <li>
+            <li key={[props.nodePath, "-", "node", "-", "label"].join()}>
                 <div onClick={toggle}>
                     <span>{props.nodeName}</span>
                 </div>
             </li>
             {
                 !collapsed &&
-                    <FileExplorerTree treePath={props.nodePath} />
+                    <FileExplorerTree key={[props.nodePath, "-", "subtree"].join()}
+                        treePath={props.nodePath} />
             }
         </>
     );

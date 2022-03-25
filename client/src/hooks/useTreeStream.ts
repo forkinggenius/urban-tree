@@ -1,47 +1,49 @@
 import { useEffect } from "react";
 
+import { FileTreeModification, FileTreeNode } from "../utils/fileTree";
+import { TreeMemo } from "../utils/treeMemo";
+
 const SSE_ENDPOINT_URL = 'http://localhost:3001/events';
 
 let eventSource: EventSource | undefined;
 
-let eventSourceOnUpdate: EventSourceCallback | null = null;
-let eventSourceOnModify: EventSourceCallback | null = null;
-
 type EventSourceCallback = (this: EventSource, ev: Event) => any;
 
-export function useTreeStream(onUpdate: EventSourceCallback, onModify: EventSourceCallback) {
+export function useTreeStream(eventHandler: EventSourceCallback) {
     useEffect(() => {
         if (eventSource === undefined) {
             eventSource = new EventSource(SSE_ENDPOINT_URL);
 
-            if (!eventSourceOnUpdate) {
-                eventSourceOnUpdate = onUpdate;
-                eventSource.addEventListener('update', eventSourceOnUpdate);
-            }
+            eventSource.addEventListener('update', (event) => {
+                const parsedData: Map<string, FileTreeNode> = JSON.parse(event.data);
 
-            if (!eventSourceOnModify) {
-                eventSourceOnModify = onModify;
-                eventSource.addEventListener('modify', eventSourceOnModify);
-            }
+                TreeMemo.update(new FileTreeNode(parsedData));
+            });
+
+            eventSource.addEventListener('modify', (event) => {
+                const parsedData: FileTreeModification = JSON.parse(event.data);
+
+                const action = parsedData.action;
+                const actionPath = parsedData.path;
+                const node = parsedData.node;
+                
+                if (action.startsWith('add')) {
+                    TreeMemo.add(actionPath, JSON.parse(node));
+                } else if (action.startsWith('unlink')) {
+                    TreeMemo.unlink(actionPath);
+                }
+            });
 
             eventSource.onerror = () => {
                 if (eventSource) {
-                    if (eventSourceOnUpdate) {
-                        eventSource.removeEventListener('update', eventSourceOnUpdate);
-                    }
-
-                    if (eventSourceOnModify) {
-                        eventSource.removeEventListener('modify', eventSourceOnModify);
-                    }
-
-                    eventSourceOnUpdate = null;
-                    eventSourceOnModify = null;
-
                     eventSource.close();
                     
                     eventSource = undefined;
                 }
             };
         }
+
+        eventSource.addEventListener('update', eventHandler);
+        eventSource.addEventListener('modify', eventHandler);
     }, []);
 }

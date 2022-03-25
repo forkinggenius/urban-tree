@@ -15,7 +15,7 @@ export class FileTreeNode {
 export class FileTreeModification {
     action = ''
     path = ''
-    node: FileTreeNode = new FileTreeNode()
+    node = ''
 }
 
 export function getChildrenNodesAsArray(node: FileTreeNode): FileTreeNode[] {
