@@ -6,6 +6,8 @@ import {
 
 import FileExplorerNode from "./FileExplorerNode";
 
+import '../css/FileExplorerTree.css';
+
 interface FileExplorerTreeProps {
     treePath?: string
 }
@@ -15,7 +17,7 @@ function FileExplorerTree(props: FileExplorerTreeProps) {
         .filter((node: FileTreeNode) => node && node.filePath.length > 0);
     
     return (
-        <ul key={[props.treePath, "-", "tree", "-", "list"].join()}>
+        <ul className="FileTree" key={[props.treePath, "-", "tree"].join()}>
             {
                 childNodes.map((node: FileTreeNode) => 
                     <FileExplorerNode key={[node.filePath, "-", "123"].join()}

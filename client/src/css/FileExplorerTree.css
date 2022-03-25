@@ -1,0 +1,17 @@
+.FileTree {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.App > .FileTree:first-child {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}

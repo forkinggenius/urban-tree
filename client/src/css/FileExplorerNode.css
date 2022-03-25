@@ -1,0 +1,70 @@
+.FileNode {
+    display: flex;
+    flex-direction: column;
+}
+
+.App > .FileTree:first-child > .FileNode {
+    height: 70vh;
+    max-width: 512px;
+    min-width: 256px;
+    width: 275px;
+    margin: 15vh 10vw;
+    background-color: #D0DDD7;
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px rgba(22, 22, 22, 0.12);
+    overflow-y: scroll;
+    resize: horizontal;
+}
+
+.FileNodeLabel {
+    position: relative;
+    top: 0;
+    left: 0;
+    padding: 8px 24px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.FileNodeLabel::before {
+    content: "{ }";
+    position: absolute;
+    top: 13px;
+    left: 10px;
+    font-size: 7px;
+}
+
+.CollapsableFileNode > .FileNodeLabel::before,
+.CollapsedFileNode > .FileNodeLabel::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    width: 5px;
+    height: 5px;
+    background-color: transparent;
+    border-right: 1px solid #222222;
+    border-bottom: 1px solid #222222;
+}
+
+.CollapsableFileNode > .FileNodeLabel::before {
+    top: 12px;
+    transform: rotateZ(45deg);
+}
+
+.CollapsedFileNode > .FileNodeLabel::before {
+    top: 14px;
+    transform: rotateZ(-45deg);
+}
+
+.FileNodeLabel:hover {
+    color: #904C77;
+}
+
+.CollapsableFileNode > .FileNodeLabel:hover::before,
+.CollapsedFileNode > .FileNodeLabel:hover::before {
+    border-color: #904C77;
+}
+
+.App > .FileTree:first-child > .FileNode > .FileNodeLabel {
+    text-transform: uppercase;
+    font-weight: bold;
+}
