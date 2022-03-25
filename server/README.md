@@ -26,8 +26,11 @@ npm install
 
 We've added a script that will help you run the server instantly.
 
+But when running the server, you'll want to add the path to the directories you want to observe,
+so make sure you include them as parameters as shown below.
+
 ```sh
-npm run deploy
+npm run deploy <path-1> <path-2> <path-3> ...
 ```
 
 In case you'd like to learn more about the scripts available, you can find them [here](#glossary)
