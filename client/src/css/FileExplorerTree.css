@@ -3,15 +3,14 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    padding-left: 16px;
+    padding-left: 10px;
 }
 
 .App > .FileTree:first-child {
     min-height: 100vh;
-    max-width: 1200px;
     margin: 0;
     padding: 0;
-    padding-left: 0 !important;
+    padding-left: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
