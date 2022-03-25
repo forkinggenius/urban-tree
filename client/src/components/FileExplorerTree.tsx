@@ -1,4 +1,4 @@
-import { useTreeMemo } from "../hooks/treeMemo";
+import { useTreeMemo } from "../hooks/useTreeMemo";
 import { 
     getChildrenNodesAsArray,    
     FileTreeNode,
