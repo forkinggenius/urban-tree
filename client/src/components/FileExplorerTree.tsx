@@ -1,3 +1,4 @@
+import { useTreeMemo } from "../hooks/treeMemo";
 import { 
     getChildrenNodesAsArray,    
     FileTreeNode,
@@ -5,16 +6,19 @@ import {
 
 import FileExplorerNode from "./FileExplorerNode";
 
-interface FileExplorerTreeProps {
-    treeRoot: FileTreeNode
+class FileExplorerTreeProps {
+    treePath: string = ''
 }
 
 function FileExplorerTree(props: FileExplorerTreeProps) {
+    const childNodes = useTreeMemo(props.treePath);
+    
     return (
         <ul>
             {
-                getChildrenNodesAsArray(props.treeRoot).map((node: FileTreeNode) => 
-                    <FileExplorerNode node={node} key={node.filePath} />
+                childNodes.map((node: FileTreeNode) => 
+                    <FileExplorerNode key={node.filePath}
+                        nodeName={node.baseName} nodePath={node.filePath} />
                 )
             }
         </ul>

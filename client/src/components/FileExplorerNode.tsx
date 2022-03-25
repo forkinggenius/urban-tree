@@ -4,7 +4,8 @@ import { FileTreeNode } from "../utils/fileTree";
 import FileExplorerTree from "./FileExplorerTree";
 
 interface FileExplorerNodeProps {
-    node: FileTreeNode
+    nodeName: string,
+    nodePath: string,
 }
 
 function FileExplorerNode(props: FileExplorerNodeProps) {
@@ -18,12 +19,12 @@ function FileExplorerNode(props: FileExplorerNodeProps) {
         <>
             <li>
                 <div onClick={toggle}>
-                    <span>{props.node.baseName}</span>
+                    <span>{props.nodeName}</span>
                 </div>
             </li>
             {
                 !collapsed &&
-                    <FileExplorerTree treeRoot={props.node} />
+                    <FileExplorerTree treePath={props.nodePath} />
             }
         </>
     );
