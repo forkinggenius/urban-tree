@@ -5,10 +5,36 @@ export class FileTreeNode {
     isDirectory = false;
     childNodes = new Map<string, FileTreeNode>();
 
-    constructor(childNodes?: Map<string, FileTreeNode>) {
+    constructor(
+        filePath: string,
+        baseName: string,
+        isDirectory: boolean,
+        childNodes?: Map<string, FileTreeNode>,
+    ) {
+        this.filePath = filePath;
+        this.baseName = baseName;
+        this.isDirectory = isDirectory;
+
         if (childNodes) {
-            this.childNodes = childNodes;
+            Object.values(childNodes).forEach((childObject) => {
+                const node: FileTreeNode = FileTreeNode.fromObject(childObject);
+                
+                this.childNodes.set(node.filePath, node);
+            });
         }
+    }
+
+    getChildNodesAsArray(): FileTreeNode[] {
+        return Array.from(this.childNodes.values());
+    }
+
+    static fromObject(nodeObject: FileTreeNode) {
+        return new FileTreeNode(
+            nodeObject.filePath,
+            nodeObject.baseName,
+            nodeObject.isDirectory,
+            nodeObject.childNodes,
+        );
     }
 }
 
@@ -16,8 +42,4 @@ export class FileTreeModification {
     action = ''
     path = ''
     node = ''
-}
-
-export function getChildrenNodesAsArray(node: FileTreeNode): FileTreeNode[] {
-    return Object.values(node.childNodes);
 }

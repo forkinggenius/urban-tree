@@ -20,16 +20,16 @@ function FileExplorerNode(props: FileExplorerNodeProps) {
 
     const nodePath = props.nodePath;
     const nodeName = props.nodeName;
-    const hasChildren = TreeMemo.hasChildren(nodePath);
+    const isDirectory = TreeMemo.isDirectory(nodePath);
 
     return (
         <>
             <li key={[props.nodePath, "-", "node"].join()}
-                    className={hasChildren ? collapsed ? 
+                    className={isDirectory ? collapsed ? 
                         "FileNode CollapsedFileNode" : "FileNode CollapsableFileNode" : "FileNode"}>
-                <label className="FileNodeLabel" onClick={hasChildren ? toggle : void 0}>{props.nodeName}</label>
+                <label className="FileNodeLabel" onClick={isDirectory ? toggle : void 0}>{props.nodeName}</label>
                 {
-                    hasChildren && !collapsed &&
+                    isDirectory && !collapsed &&
                         <FileExplorerTree key={[props.nodePath, "-", "subtree"].join()}
                             treePath={props.nodePath} />
                 }

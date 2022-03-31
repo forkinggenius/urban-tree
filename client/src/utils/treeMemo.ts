@@ -1,17 +1,20 @@
 import path from 'path-browserify';
 
-import { FileTreeNode, getChildrenNodesAsArray } from "../utils/fileTree";
+import { FileTreeNode } from "../utils/fileTree";
 
 export class TreeMemo {
-    static memo: Map<string, FileTreeNode[]> = new Map<string, FileTreeNode[]>();
+    static memo: Map<string, FileTreeNode> = new Map<string, FileTreeNode>();
 
     private static _resetTreeMemo = () => this.memo.clear();
 
     private static _memoizeTree(node: FileTreeNode) {
+        if (!node.isDirectory) return;
+
         const nodeInMemo: boolean = this.memo.has(node.filePath);
-        const childNodes: FileTreeNode[] = getChildrenNodesAsArray(node);
+        const childNodes: FileTreeNode[] = node.getChildNodesAsArray();
+
         if (!nodeInMemo) {
-            this.memo.set(node.filePath, childNodes);
+            this.memo.set(node.filePath, node);
         }
     
         childNodes.forEach((child: FileTreeNode) => this._memoizeTree(child));
@@ -28,10 +31,18 @@ export class TreeMemo {
     }
 
     public static add(nodePath: string, node: FileTreeNode) {
+        if (node.isDirectory) {
+            this.memo.set(nodePath, node);
+        }
+
         const parentPath: string = path.dirname(nodePath);
-        const siblingNodes: FileTreeNode[] = this.memo.get(parentPath) || [];
-    
-        this.memo.set(parentPath, siblingNodes.concat([node]));
+        const parentNode: FileTreeNode | undefined = this.memo.get(parentPath);
+
+        if (parentNode === undefined) return;
+
+        parentNode.childNodes.set(nodePath, node);
+
+        this.memo.set(parentPath, parentNode);
     }
 
     public static unlink(nodePath: string) {
@@ -40,13 +51,28 @@ export class TreeMemo {
         }
     
         const parentPath: string = path.dirname(nodePath);
-        const siblingNodes: FileTreeNode[] = this.memo.get(parentPath) || [];
-        if (this.memo.has(parentPath)) {
-            this.memo.set(parentPath, siblingNodes.filter((node) => node.filePath != nodePath));
-        }
+        const parentNode: FileTreeNode | undefined = this.memo.get(parentPath);
+
+        if (parentNode === undefined) return;
+        
+        parentNode.childNodes.delete(nodePath);
+        this.memo.set(parentPath, parentNode);
     }
 
-    public static hasChildren(nodePath: string): boolean {
-        return (this.memo.get(nodePath) || []).length > 0;
+    public static isDirectory(nodePath: string): boolean {
+        const node: FileTreeNode | undefined = this.memo.get(nodePath);
+        console.log(nodePath, node);
+
+        if (node === undefined) return false;
+
+        return node.isDirectory;
+    }
+
+    public static getChildren(nodePath: string): FileTreeNode[] {
+        const node: FileTreeNode | undefined = this.memo.get(nodePath);
+        
+        if (node === undefined) return [];
+
+        return node.getChildNodesAsArray();
     }
 }
