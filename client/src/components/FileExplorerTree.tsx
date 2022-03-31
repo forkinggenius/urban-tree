@@ -1,8 +1,5 @@
 import { useTreeMemo } from "../hooks/useTreeMemo";
-import { 
-    getChildrenNodesAsArray,    
-    FileTreeNode,
-} from "../utils/fileTree";
+import { FileTreeNode } from "../utils/fileTree";
 
 import FileExplorerNode from "./FileExplorerNode";
 
@@ -13,8 +10,7 @@ interface FileExplorerTreeProps {
 }
 
 function FileExplorerTree(props: FileExplorerTreeProps) {
-    const childNodes = useTreeMemo(props.treePath || "")
-        .filter((node: FileTreeNode) => node && node.filePath.length > 0);
+    const childNodes = useTreeMemo(props.treePath || "");
     
     return (
         <ul className="FileTree" key={[props.treePath, "-", "tree"].join()}>

@@ -15,9 +15,8 @@ export function useTreeStream(eventHandler: EventSourceCallback) {
             eventSource = new EventSource(SSE_ENDPOINT_URL);
 
             eventSource.addEventListener('update', (event) => {
-                const parsedData: Map<string, FileTreeNode> = JSON.parse(event.data);
-
-                TreeMemo.update(new FileTreeNode(parsedData));
+                TreeMemo.update(
+                    new FileTreeNode('', '', true, JSON.parse(event.data)));
             });
 
             eventSource.addEventListener('modify', (event) => {
@@ -28,7 +27,8 @@ export function useTreeStream(eventHandler: EventSourceCallback) {
                 const node = parsedData.node;
                 
                 if (action.startsWith('add')) {
-                    TreeMemo.add(actionPath, JSON.parse(node));
+                    TreeMemo.add(actionPath,
+                        FileTreeNode.fromObject(JSON.parse(node)));
                 } else if (action.startsWith('unlink')) {
                     TreeMemo.unlink(actionPath);
                 }
